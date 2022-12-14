@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
     <script src="/aframe.min.js"></script>
-    <!-- we import arjs version without NFT but with marker + location based support -->
     <script src="/aframe-ar.js"></script>
+    <script src="/tracking.js"></script>
+    <script src="/main.js"></script>
     <body style="margin : 0px; overflow: hidden;">
+        <canvas id="canvas" style="position: absolute;"></canvas>
         <a-scene embedded arjs>
         <a-marker preset="hiro">
             <!-- we use cors proxy to avoid cross-origin problems ATTENTION! you need to set up your server -->
