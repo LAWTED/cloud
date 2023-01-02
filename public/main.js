@@ -1,18 +1,31 @@
 // import tracking.js
 window.addEventListener("arjs-video-loaded", (e) => {
-  let video = document.getElementById("arjs-video");
-  let canvas = document.getElementById("canvas");
+  setTimeout(() => initCanvas(), 1000)
+  setTimeout(() => initTrack(), 2000)
+});
+
+const initCanvas = () => {
+  let canvas = document.createElement('canvas');
+  canvas.id = 'canvas';
+  canvas.width= document.body.clientWidth
+  canvas.height = document.body.clientHeight + parseInt(document.body.style.marginTop.replace('px', ' '))
+  canvas.style = 'position: fixed'
+  document.body.insertBefore(canvas, document.body.firstChild);
+}
+
+const initTrack = () => {
+  console.log('initTracking...')
+  let canvas = document.getElementById('canvas');
   let context = canvas.getContext("2d");
   let tracker = new tracking.ColorTracker(["yellow"]);
-  let observer =new MutationObserver(function (mutations,observe) {
-    console.log('body size changed', document.body.clientWidth, document.body.clientHeight);
-    canvas.height = document.body.clientHeight;
-    canvas.width = document.body.clientWidth;
-  });
-  observer.observe(document.body,{attributes:true,attributeFilter:['style'],attributeOldValue:true});
+  // let observer =new MutationObserver(function (mutations,observe) {
+  //   console.log(document.body.offsetHeight, document.body.offsetWidth)
+  //   canvas.height = document.body.clientHeight;
+  //   canvas.width = document.body.clientWidth;
+  // });
+  // observer.observe(document.body,{attributes:true,attributeFilter:['style'],attributeOldValue:true});
 
-  console.log("arjs-video-loaded", e.detail);
-  tracking.track("#arjs-video", tracker, { camera: true });
+  tracking.track('#arjs-video', tracker, { camera: true });
   tracker.on("track", function (event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -36,4 +49,5 @@ window.addEventListener("arjs-video-loaded", (e) => {
       );
     });
   });
-});
+
+}
