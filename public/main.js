@@ -31,7 +31,7 @@ const initTrack = () => {
   // });
   // observer.observe(document.body,{attributes:true,attributeFilter:['style'],attributeOldValue:true});
 
-  tracking.track('#arjs-video', tracker, { camera: true });
+  tracking.track('#arjs-video', tracker);
   tracker.on("track", function (event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
