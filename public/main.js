@@ -15,7 +15,7 @@ const initCanvas = () => {
   const { width, height } = video.style;
   canvas.width = width.replace("px", "");
   canvas.height = height.replace("px", "");
-  canvas.style = video.style
+  canvas.style.cssText = video.style.cssText
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
