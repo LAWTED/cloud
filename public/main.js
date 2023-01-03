@@ -5,19 +5,16 @@ window.addEventListener("arjs-video-loaded", (e) => {
 });
 
 const log = (msg) => {
-
   document.getElementById("log").innerHTML += `<br/> ${msg}`;
 };
-
 const initCanvas = () => {
   log("initCanvas...");
   let canvas = document.createElement("canvas");
   canvas.id = "canvas";
-  let html = document.getElementById("html");
-  canvas.width = html.offsetWidth;
-  canvas.height = html.offsetHeight;
-  console.log(canvas.width, canvas.height);
-  canvas.style = "position: fixed";
+  let body = document.body;
+  const { width, height } = body.style;
+  canvas.width = width.replace("px", "");
+  canvas.height = height.replace("px", "");
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
