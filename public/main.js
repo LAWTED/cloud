@@ -15,8 +15,11 @@ const initCanvas = () => {
   const { width, height, marginLeft, marginRight, margin } = video.style;
   canvas.width = width.replace("px", "");
   canvas.height = height.replace("px", "");
-  const marginLeftNum = parseInt(marginLeft.replace('px',''))
-  canvas.style = `position: fixed; margin-left: ${marginLeftNum > 0 ? -marginLeftNum: marginLeftNum};`;
+  const marginLeftNum = parseInt(marginLeft.replace("px", ""));
+  log("marginLeftNum:", marginLeftNum);
+  canvas.style = `position: fixed; margin-left: ${
+    marginLeftNum > 0 ? -marginLeftNum : marginLeftNum
+  }px;`;
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
