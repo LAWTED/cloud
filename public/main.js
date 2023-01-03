@@ -15,10 +15,7 @@ const initCanvas = () => {
   const { width, height, marginLeft, marginRight, margin } = video.style;
   canvas.width = width.replace("px", "");
   canvas.height = height.replace("px", "");
-  const marginLeftNum = parseInt(marginLeft.replace('px', ''))
-  log('margin:'+margin)
-  canvas.style.marginLeft = marginLeftNum > 0 ? `-${marginLeftNum*2}px` : `${marginLeft*2}px`
-  log('canvas style marginLeft:'+ canvas.style.marginLeft)
+  canvas.style = "position: fixed"
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
