@@ -1,29 +1,30 @@
 // import tracking.js
 window.addEventListener("arjs-video-loaded", (e) => {
-  setTimeout(() => initCanvas(), 1000)
-  setTimeout(() => initTrack(), 2000)
+  setTimeout(() => initCanvas(), 1000);
+  setTimeout(() => initTrack(), 2000);
 });
 
+const log = (msg) => {
+
+  document.getElementById("log").innerHTML += `<br/> ${msg}`;
+};
 
 const initCanvas = () => {
-  console.log('initCanvas...')
-  let canvas = document.createElement('canvas');
-  canvas.id = 'canvas';
-  let html = document.getElementById('html');
-  canvas.width= html.offsetWidth;
+  log("initCanvas...");
+  let canvas = document.createElement("canvas");
+  canvas.id = "canvas";
+  let html = document.getElementById("html");
+  canvas.width = html.offsetWidth;
   canvas.height = html.offsetHeight;
-  console.log(canvas.width, canvas.height)
-  canvas.style = 'position: fixed'
+  console.log(canvas.width, canvas.height);
+  canvas.style = "position: fixed";
   document.body.insertBefore(canvas, document.body.firstChild);
-}
-
-const parsePx = (cssStr) => {
-  return parseInt(cssStr.replace('px', ''))
-}
+  log(`canvas: ${canvas.width} x ${canvas.height}`);
+};
 
 const initTrack = () => {
-  console.log('initTracking...')
-  let canvas = document.getElementById('canvas');
+  log("initTrack...");
+  let canvas = document.getElementById("canvas");
   let context = canvas.getContext("2d");
   let tracker = new tracking.ColorTracker(["yellow"]);
   // let observer =new MutationObserver(function (mutations,observe) {
@@ -33,7 +34,7 @@ const initTrack = () => {
   // });
   // observer.observe(document.body,{attributes:true,attributeFilter:['style'],attributeOldValue:true});
 
-  tracking.track('#arjs-video', tracker);
+  tracking.track("#arjs-video", tracker);
   tracker.on("track", function (event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -57,5 +58,4 @@ const initTrack = () => {
       );
     });
   });
-
-}
+};
