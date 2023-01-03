@@ -17,7 +17,7 @@ const initCanvas = () => {
   canvas.height = height.replace("px", "");
   log('margin:'+margin)
   canvas.style.marginLeft = parseInt(-marginLeft.replace("px", ""))
-  log('canvas style:'+ canvas.style)
+  log('canvas style marginLeft:'+ canvas.style.marginLeft)
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
