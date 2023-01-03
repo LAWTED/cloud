@@ -12,6 +12,7 @@ const initCanvas = () => {
   let html = document.getElementById('html');
   canvas.width= html.offsetWidth;
   canvas.height = html.offsetHeight;
+  console.log(canvas.width, canvas.height)
   canvas.style = 'position: fixed'
   document.body.insertBefore(canvas, document.body.firstChild);
 }
