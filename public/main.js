@@ -12,11 +12,12 @@ const initCanvas = () => {
   let canvas = document.createElement("canvas");
   canvas.id = "canvas";
   let body = document.body;
-  const { width, height, margin } = body.style;
+  const { width, height, marginLeft, marginRight, margin } = body.style;
   canvas.width = width.replace("px", "");
   canvas.height = height.replace("px", "");
   log('margin:'+margin)
-  canvas.style.margin = margin;
+  canvas.style.marginLeft = marginLeft;
+  canvas.style.marginRight = marginRight;
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
