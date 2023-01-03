@@ -11,12 +11,13 @@ const initCanvas = () => {
   log("initCanvas...");
   let canvas = document.createElement("canvas");
   canvas.id = "canvas";
-  let body = document.body;
-  const { width, height, marginLeft, marginRight, margin } = body.style;
+  let video = document.getElementsByTagName('video')[0]
+  const { width, height, marginLeft, marginRight, margin } = video.style;
   canvas.width = width.replace("px", "");
   canvas.height = height.replace("px", "");
+  const marginLeftNum = parseInt(marginLeft.replace('px', ''))
   log('margin:'+margin)
-  canvas.style.marginLeft = parseInt(marginLeft.replace('px', '')) > 0 ? `-${marginLeft}` : marginLeft.replace('-', '')
+  canvas.style.marginLeft = marginLeftNum > 0 ? `-${marginLeftNum*2}px` : `${marginLeft*2}px`
   log('canvas style marginLeft:'+ canvas.style.marginLeft)
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
