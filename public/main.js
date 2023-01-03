@@ -7,10 +7,15 @@ window.addEventListener("arjs-video-loaded", (e) => {
 const initCanvas = () => {
   let canvas = document.createElement('canvas');
   canvas.id = 'canvas';
-  canvas.width= document.body.clientWidth
-  canvas.height = document.body.clientHeight + parseInt(document.body.style.marginTop.replace('px', ' '))
+  const {marginTop, marginBottom, marginLeft, marginRight} = document.body.style
+  canvas.width= document.body.clientWidth + parsePx(marginLeft) + parsePx(marginRight)
+  canvas.height = document.body.clientHeight + parsePx(marginTop) + parsePx(marginBottom)
   canvas.style = 'position: fixed'
   document.body.insertBefore(canvas, document.body.firstChild);
+}
+
+const parsePx = (cssStr) => {
+  return parseInt(cssStr.replace('px', ''))
 }
 
 const initTrack = () => {
