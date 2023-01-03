@@ -11,11 +11,12 @@ const initCanvas = () => {
   log("initCanvas...");
   let canvas = document.createElement("canvas");
   canvas.id = "canvas";
-  let video = document.getElementsByTagName('video')[0]
+  let video = document.getElementsByTagName("video")[0];
   const { width, height, marginLeft, marginRight, margin } = video.style;
   canvas.width = width.replace("px", "");
   canvas.height = height.replace("px", "");
-  canvas.style = "position: fixed"
+  canvas.style = "position: fixed;";
+  canvas.style.marginLeft = parseInt(marginLeft.replace('px', '')) > 0 ? `-${marginLeft}px` : `${marginLeft}px`
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
