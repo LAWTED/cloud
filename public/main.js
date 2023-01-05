@@ -15,17 +15,40 @@ const initCanvas = () => {
   const { width, height } = video.style;
   canvas.width = width.replace("px", "");
   canvas.height = height.replace("px", "");
-  canvas.style.cssText = video.style.cssText
-  canvas.style.zIndex = 100
+  canvas.style.cssText = video.style.cssText;
+  canvas.style.zIndex = 100;
   document.body.insertBefore(canvas, document.body.firstChild);
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
+
+// 0: #5da8d0
+// 125: #4393be
+// 250: #4184b4
+// 375: #286ba4
+// 500: #04548d
+// 625: #1b233c
+// 750: #1c181b
+
+// 0: [93, 168, 208]
+// 125: [67, 147, 190]
+// 250: [65, 132, 180]
+// 375: [40, 107, 164]
+// 500: [4, 84, 141]
+// 625: [27, 35, 60]
+// 750: [28, 24, 27]
 
 const initTrack = () => {
   log("initTrack...");
   let canvas = document.getElementById("canvas");
   let context = canvas.getContext("2d");
-  let tracker = new tracking.ColorTracker(["yellow"]);
+  tracking.ColorTracker.registerColor("#5da8d0", function (r, g, b) {
+    dx = r - 93,
+    dy = g - 168,
+    dz = b - 208;
+
+    return dx * dx + dy * dy + dz * dz < 2000;
+  });
+  let tracker = new tracking.ColorTracker(["#5da8d0"]);
   // let observer =new MutationObserver(function (mutations,observe) {
   //   console.log(document.body.offsetHeight, document.body.offsetWidth)
   //   canvas.height = document.body.clientHeight;
