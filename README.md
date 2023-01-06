@@ -44,7 +44,7 @@ Start the server
 
 ## Roadmap
 
-** Cloud **
+**Cloud**
 
 - Use Tracking.js with MainColor detect and Sky Detect
 
