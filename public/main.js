@@ -23,12 +23,7 @@ const initCanvas = () => {
 
 const HexRGB = {
   "#5da8d0": [93, 168, 208],
-  "#4393be": [67, 147, 190],
-  "#4184b4": [65, 132, 180],
-  "#286ba4": [40, 107, 164],
-  "#04548d": [4, 84, 141],
   "#1b233c": [27, 35, 60],
-  "#1c181b": [28, 24, 27],
 };
 
 const registerColor = (color) => {
@@ -51,6 +46,7 @@ const initTrack = () => {
   let context = canvas.getContext("2d");
   let colors = registerColor();
   let tracker = new tracking.ColorTracker(colors);
+  let mainRect = null;
   tracking.track("#arjs-video", tracker);
   tracker.on("track", function (event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -59,25 +55,31 @@ const initTrack = () => {
       if (rect.color === "custom") {
         rect.color = tracker.customColor;
       }
-      context.strokeStyle = rect.color;
-      context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-      context.font = "11px Helvetica";
-      context.fillStyle = "#fff";
-      context.fillText(
-        "x: " + rect.x + "px",
-        rect.x + rect.width + 5,
-        rect.y + 11
-      );
-      context.fillText(
-        "y: " + rect.y + "px",
-        rect.x + rect.width + 5,
-        rect.y + 22
-      );
-      context.fillText(
-        "color: " + rect.color,
-        rect.x + rect.width + 5,
-        rect.y + 33
-      )
+      if (
+        mainRect === null ||
+        mainRect.width * mainRect.height < rect.width * rect.height
+      ) {
+        mainRect = rect;
+      }
     });
+    context.strokeStyle = mainRect.color;
+    context.strokeRect(mainRect.x, mainRect.y, mainRect.width, mainRect.height);
+    context.font = "11px Helvetica";
+    context.fillStyle = "#fff";
+    context.fillText(
+      "x: " + mainRect.x + "px",
+      mainRect.x + mainRect.width + 5,
+      mainRect.y + 11
+    );
+    context.fillText(
+      "y: " + mainRect.y + "px",
+      mainRect.x + mainRect.width + 5,
+      mainRect.y + 22
+    );
+    context.fillText(
+      "color: " + mainRect.color,
+      mainRect.x + mainRect.width + 5,
+      mainRect.y + 33
+    );
   });
 };
