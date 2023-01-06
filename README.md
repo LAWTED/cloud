@@ -43,7 +43,9 @@ Start the server
 
 ## Roadmap
 
-- Use Tracking.js and Sky Detect
+** Cloud **
+
+- Use Tracking.js with MainColor detect and Sky Detect
 
 - Use TensorFlow.js
 
