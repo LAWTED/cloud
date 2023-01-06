@@ -110,14 +110,14 @@ const initTrack = () => {
 
   let lastColor;
   const currentColor = document.getElementById("current-color");
-  const directionalLight = document.getElementById("directionalLight");
+  const model = document.getElementById("model");
   myTracker.on("track", function (event) {
     // console log when color change
     if (event.data.mainColor.hex !== lastColor) {
       lastColor = event.data.mainColor.hex;
       currentColor.style.backgroundColor = lastColor;
       currentColor.innerHTML = lastColor;
-      directionalLight.attributes['light'].value = `type: directional; color: ${lastColor}; intensity: 100`
+      model.attributes['light'].value = `type: ambient; color: ${lastColor}`;
     }
   });
 
