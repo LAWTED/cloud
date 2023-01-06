@@ -21,41 +21,36 @@ const initCanvas = () => {
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
 
-// 0: #5da8d0
-// 125: #4393be
-// 250: #4184b4
-// 375: #286ba4
-// 500: #04548d
-// 625: #1b233c
-// 750: #1c181b
+const HexRGB = {
+  "#5da8d0": [93, 168, 208],
+  "#4393be": [67, 147, 190],
+  "#4184b4": [65, 132, 180],
+  "#286ba4": [40, 107, 164],
+  "#04548d": [4, 84, 141],
+  "#1b233c": [27, 35, 60],
+  "#1c181b": [28, 24, 27],
+};
 
-// 0: [93, 168, 208]
-// 125: [67, 147, 190]
-// 250: [65, 132, 180]
-// 375: [40, 107, 164]
-// 500: [4, 84, 141]
-// 625: [27, 35, 60]
-// 750: [28, 24, 27]
+const registerColor = (color) => {
+  let registeredColor = [];
+  Object.keys(HexRGB).forEach((hex) => {
+    registeredColor.push(hex);
+    tracking.ColorTracker.registerColor(hex, function (r, g, b) {
+      const dx = r - HexRGB[hex][0];
+      const dy = g - HexRGB[hex][1];
+      const dz = b - HexRGB[hex][2];
+      return dx * dx + dy * dy + dz * dz < 1000;
+    });
+  });
+  return registeredColor;
+};
 
 const initTrack = () => {
   log("initTrack...");
   let canvas = document.getElementById("canvas");
   let context = canvas.getContext("2d");
-  tracking.ColorTracker.registerColor("#5da8d0", function (r, g, b) {
-    dx = r - 93,
-    dy = g - 168,
-    dz = b - 208;
-
-    return dx * dx + dy * dy + dz * dz < 2000;
-  });
-  let tracker = new tracking.ColorTracker(["#5da8d0"]);
-  // let observer =new MutationObserver(function (mutations,observe) {
-  //   console.log(document.body.offsetHeight, document.body.offsetWidth)
-  //   canvas.height = document.body.clientHeight;
-  //   canvas.width = document.body.clientWidth;
-  // });
-  // observer.observe(document.body,{attributes:true,attributeFilter:['style'],attributeOldValue:true});
-
+  let colors = registerColor();
+  let tracker = new tracking.ColorTracker(colors);
   tracking.track("#arjs-video", tracker);
   tracker.on("track", function (event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -78,6 +73,11 @@ const initTrack = () => {
         rect.x + rect.width + 5,
         rect.y + 22
       );
+      context.fillText(
+        "color: " + rect.color,
+        rect.x + rect.width + 5,
+        rect.y + 33
+      )
     });
   });
 };
