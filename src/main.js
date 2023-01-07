@@ -25,7 +25,7 @@ const initCanvas = () => {
 };
 
 const currentColor = document.getElementById("current-color");
-
+const model = document.getElementById("model");
 const initTrack = () => {
   log("initTrack...");
   let video = document.getElementById("arjs-video");
@@ -49,8 +49,10 @@ const initTrack = () => {
         imageData: skyView,
       },
       function (color) {
-        currentColor.style.backgroundColor = color.hex;
-        currentColor.innerHTML = color.hex;
+        const { hex } = color
+        currentColor.style.backgroundColor = hex;
+        currentColor.innerHTML = hex;
+        model.attributes['light'].value = `type: ambient; color: ${hex}`;
       }
     );
     skyView = []
