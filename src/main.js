@@ -32,18 +32,18 @@ const initTrack = () => {
   let canvas = document.getElementById("canvas");
   let cap = new cv.VideoCapture(video);
 
+  let skyView = [];
   const kSize = new cv.Size(9, 3);
   const calSkyLine = (dst, h, w) => {
-    let skyline = cv.Mat.zeros(h, w, cv.CV_8UC1);
-    let skyView = [];
+    // let skyline = cv.Mat.zeros(h, w, cv.CV_8UC1);
     for (let j = 0; j < w; j++) {
       for (let i = 0; i < h; i++) {
-        skyline.ucharPtr(i, j)[0] = 1;
+        // skyline.ucharPtr(i, j)[0] = 1;
         skyView.push(...src.ucharPtr(i, j));
         if (dst.ucharPtr(i, j)[0] === 0) break;
       }
     }
-    src.copyTo(dst, skyline)
+    // src.copyTo(dst, skyline)
     new ImgMainColor(
       {
         imageData: skyView,
@@ -53,6 +53,7 @@ const initTrack = () => {
         currentColor.innerHTML = color.hex;
       }
     );
+    skyView = []
   };
 
   const getSkyRegionGradient = (src, mask, h, w) => {
@@ -82,12 +83,11 @@ const initTrack = () => {
       let begin = Date.now();
       cap.read(src);
       getSkyRegionGradient(src, dst, video.height, video.width);
-      cv.imshow("canvas", dst);
-      // schedule next one.
+      // cv.imshow("canvas", dst);
       let delay = 1000 / FPS - (Date.now() - begin);
       setTimeout(processVideo, delay);
     } catch (err) {
-      console.log(err);
+      log(`发生异常请重新进入`);
     }
   };
 
