@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="">
+    <video src="/public/beijing/beijing-day&night-hiro.mp4" id="videoInput" autoplay="true" controls width="600"
+      height="320"></video>
+    <canvas id="canvasOutput" width="320"></canvas>
+  </div>
+</body>
+
+<script src="/src/opencv/index.js" type="text/javascript"></script>
+<script>
+
+  setTimeout(() => {
+
+    let video = document.getElementById('videoInput');
+    let cap = new cv.VideoCapture(video);
+
+    const kSize = new cv.Size(9, 3);
+    const medfilt = (array, windowSize) => {
+      const result = [];
+      for (let i = 0; i < array.length; i++) {
+        // 创建包含相邻元素的数组
+        const neighbors = array.slice(
+          Math.max(i - windowSize, 0),
+          Math.min(i + windowSize + 1, array.length)
+        );
+        // 将数组排序，并取中位数
+        const median = neighbors.sort()[Math.floor(neighbors.length / 2)];
+        // 将目标元素与中位数进行比较，并将结果推入结果数组
+        result.push(Math.max(array[i], median));
+      }
+      return result;
+    };
+
+    const calSkyLine = (mask, h, w) => {
+      let skyline = cv.Mat.zeros(h, w, cv.CV_8UC1);
+      let firstIndex = []
+      for (let j = 0; j < w; j++) {
+        for (let i = 0; i < h; i++) {
+          skyline.ucharPtr(i, j)[0] = 255
+          if (mask.ucharPtr(i, j)[0] === 0) break
+        }
+      }
+      src.copyTo(mask, skyline);
+      skyline.delete();
+      return mask
+    };
+
+    const getSkyRegionGradient = (src, mask, h, w) => {
+      let imgGray = new cv.Mat();
+      cv.cvtColor(src, imgGray, cv.COLOR_RGBA2GRAY, 0);
+
+      cv.blur(imgGray, imgGray, kSize);
+      cv.medianBlur(imgGray, imgGray, 5);
+      let lap = new cv.Mat();
+      cv.Laplacian(imgGray, lap, cv.CV_8U, 1, 1, 0, cv.BORDER_DEFAULT);
+      // gradient_mask = (lap < 6).astype(np.uint8)
+      let gradient_mask = new cv.Mat();
+      cv.threshold(lap, gradient_mask, 6, 255, cv.THRESH_BINARY_INV);
+      kernel = cv.getStructuringElement(cv.MORPH_RECT, kSize);
+      let M = cv.Mat.ones(9, 3, cv.CV_8U);
+      cv.erode(
+        gradient_mask,
+        mask,
+        M,
+      );
+      imgGray.delete(); lap.delete()
+      return calSkyLine(mask, h, w)
+    };
+
+    let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+    let dst = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+
+
+    const FPS = 30;
+    function processVideo() {
+      try {
+        let begin = Date.now();
+        cap.read(src);
+        getSkyRegionGradient(src, dst, video.height, video.width)
+        cv.imshow("canvasOutput", dst);
+        // schedule next one.
+        let delay = 1000 / FPS - (Date.now() - begin);
+        setTimeout(processVideo, delay);
+      } catch (err) {
+        console.log(err)
+      }
+    };
+
+    // schedule the first one.
+    setTimeout(processVideo, 0);
+  }, 1000)
+</script>
+
+</html>
