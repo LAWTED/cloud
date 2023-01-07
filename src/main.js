@@ -43,6 +43,7 @@ const initTrack = () => {
         if (dst.ucharPtr(i, j)[0] === 0) break;
       }
     }
+    src.copyTo(dst, skyline)
     new ImgMainColor(
       {
         imageData: skyView,
@@ -81,7 +82,7 @@ const initTrack = () => {
       let begin = Date.now();
       cap.read(src);
       getSkyRegionGradient(src, dst, video.height, video.width);
-      // cv.imshow("canvas", dst);
+      cv.imshow("canvas", dst);
       // schedule next one.
       let delay = 1000 / FPS - (Date.now() - begin);
       setTimeout(processVideo, delay);
