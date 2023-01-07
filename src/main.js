@@ -24,7 +24,7 @@ const initCanvas = () => {
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
 
-const currentColor = document.getElementById('current-color')
+const currentColor = document.getElementById("current-color");
 
 const initTrack = () => {
   log("initTrack...");
@@ -35,21 +35,17 @@ const initTrack = () => {
   const kSize = new cv.Size(9, 3);
   const calSkyLine = (dst, h, w) => {
     let skyline = cv.Mat.zeros(h, w, cv.CV_8UC1);
+    let skyView = [];
     for (let j = 0; j < w; j++) {
-      // flag is true when find the first black pixel in the column
-      let flag = false;
       for (let i = 0; i < h; i++) {
-        if (!flag) skyline.ucharPtr(i, j)[0] = 1;
-        if (dst.ucharPtr(i, j)[0] === 0) {
-          flag = true;
-        }
-        if (flag) dst.ucharPtr(i, j)[3] = 0;
+        skyline.ucharPtr(i, j)[0] = 1;
+        skyView.push(...src.ucharPtr(i, j));
+        if (dst.ucharPtr(i, j)[0] === 0) break;
       }
     }
-    src.copyTo(dst, skyline);
     new ImgMainColor(
       {
-        imageData: src.data,
+        imageData: skyView,
       },
       function (color) {
         currentColor.style.backgroundColor = color.hex;
