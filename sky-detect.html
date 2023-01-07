@@ -9,16 +9,23 @@
 </head>
 
 <body>
-  <div class="">
-    <video src="/public/beijing/beijing-day&night-hiro.mp4" id="videoInput" autoplay="true" controls width="600"
-      height="320"></video>
-    <canvas id="canvasOutput" width="320"></canvas>
+  <div style="display: flex;">
+    <div>
+      <p id="all-color" style="color: white;  overflow: scroll; z-index: 1000">></p>
+      <video src="/public/beijing/beijing-day&night-hiro-vertical.mp4" id="videoInput" autoplay="true" controls width="600"
+        height="320"></video>
+    </div>
+
+    <div>
+      <p id="sky-color" style="color: white;  overflow: scroll; z-index: 1000">></p>
+      <canvas id="canvasOutput" width="320"></canvas>
+    </div>
   </div>
 </body>
 
-<script src="/src/opencv/index.js" type="text/javascript"></script>
-<script>
-
+<script src="/public/opencv/index.js" type="text/javascript"></script>
+<script type="module">
+  import { ImgMainColor } from '/src/main-color.js'
   setTimeout(() => {
 
     let video = document.getElementById('videoInput');
@@ -41,18 +48,37 @@
       return result;
     };
 
+    const allColor = document.getElementById("all-color");
+    const skyColor = document.getElementById("sky-color");
     const calSkyLine = (mask, h, w) => {
       let skyline = cv.Mat.zeros(h, w, cv.CV_8UC1);
-      let firstIndex = []
+      let skyView = []
       for (let j = 0; j < w; j++) {
         for (let i = 0; i < h; i++) {
-          skyline.ucharPtr(i, j)[0] = 255
+          skyline.ucharPtr(i, j)[0] = 1
+          skyView.push(...src.ucharPtr(i, j))
           if (mask.ucharPtr(i, j)[0] === 0) break
         }
       }
+      new ImgMainColor(
+        {
+          imageData: skyView,
+        },
+        function (color) {
+          skyColor.style.backgroundColor = color.hex;
+          skyColor.innerHTML = color.hex;
+        }
+      );
+      new ImgMainColor(
+        {
+          imageData: src.data,
+        },
+        function (color) {
+          allColor.style.backgroundColor = color.hex;
+          allColor.innerHTML = color.hex;
+        }
+      )
       src.copyTo(mask, skyline);
-      skyline.delete();
-      return mask
     };
 
     const getSkyRegionGradient = (src, mask, h, w) => {
@@ -66,7 +92,6 @@
       // gradient_mask = (lap < 6).astype(np.uint8)
       let gradient_mask = new cv.Mat();
       cv.threshold(lap, gradient_mask, 6, 255, cv.THRESH_BINARY_INV);
-      kernel = cv.getStructuringElement(cv.MORPH_RECT, kSize);
       let M = cv.Mat.ones(9, 3, cv.CV_8U);
       cv.erode(
         gradient_mask,
@@ -74,7 +99,7 @@
         M,
       );
       imgGray.delete(); lap.delete()
-      return calSkyLine(mask, h, w)
+      calSkyLine(mask, h, w)
     };
 
     let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);

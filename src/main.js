@@ -1,4 +1,4 @@
-import { ImgMainColor } from "../main-color.js";
+import { ImgMainColor } from "./main-color.js";
 window.addEventListener("arjs-video-loaded", (e) => {
   setTimeout(() => initCanvas(), 1000);
   setTimeout(() => initTrack(), 2000);
@@ -24,24 +24,38 @@ const initCanvas = () => {
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
 
+const currentColor = document.getElementById('current-color')
+
 const initTrack = () => {
   log("initTrack...");
-  let video = document.getElementById('arjs-video')
-  let canvas = document.getElementById('canvas')
+  let video = document.getElementById("arjs-video");
+  let canvas = document.getElementById("canvas");
   let cap = new cv.VideoCapture(video);
 
   const kSize = new cv.Size(9, 3);
   const calSkyLine = (dst, h, w) => {
     let skyline = cv.Mat.zeros(h, w, cv.CV_8UC1);
     for (let j = 0; j < w; j++) {
+      // flag is true when find the first black pixel in the column
+      let flag = false;
       for (let i = 0; i < h; i++) {
-        skyline.ucharPtr(i, j)[0] = 255;
-        if (dst.ucharPtr(i, j)[0] === 0) break;
+        if (!flag) skyline.ucharPtr(i, j)[0] = 1;
+        if (dst.ucharPtr(i, j)[0] === 0) {
+          flag = true;
+        }
+        if (flag) dst.ucharPtr(i, j)[3] = 0;
       }
     }
     src.copyTo(dst, skyline);
-    skyline.delete();
-    return dst;
+    new ImgMainColor(
+      {
+        imageData: src.data,
+      },
+      function (color) {
+        currentColor.style.backgroundColor = color.hex;
+        currentColor.innerHTML = color.hex;
+      }
+    );
   };
 
   const getSkyRegionGradient = (src, mask, h, w) => {
@@ -59,7 +73,7 @@ const initTrack = () => {
     cv.erode(gradient_mask, mask, M);
     imgGray.delete();
     lap.delete();
-    return calSkyLine(mask, h, w);
+    calSkyLine(mask, h, w);
   };
 
   let src = new cv.Mat(canvas.height, canvas.width, cv.CV_8UC4);
@@ -67,19 +81,18 @@ const initTrack = () => {
 
   const FPS = 30;
   const processVideo = () => {
-    log(`start sky detect`)
     try {
       let begin = Date.now();
       cap.read(src);
       getSkyRegionGradient(src, dst, video.height, video.width);
-      cv.imshow("canvas", dst);
+      // cv.imshow("canvas", dst);
       // schedule next one.
       let delay = 1000 / FPS - (Date.now() - begin);
       setTimeout(processVideo, delay);
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   // schedule the first one.
   setTimeout(processVideo, 1000);
