@@ -66,7 +66,6 @@ const initTrack = () => {
     cv.medianBlur(imgGray, imgGray, 5);
     let lap = new cv.Mat();
     cv.Laplacian(imgGray, lap, cv.CV_8U, 1, 1, 0, cv.BORDER_DEFAULT);
-    // gradient_mask = (lap < 6).astype(np.uint8)
     let gradient_mask = new cv.Mat();
     cv.threshold(lap, gradient_mask, 6, 255, cv.THRESH_BINARY_INV);
     let M = cv.Mat.ones(9, 3, cv.CV_8U);
