@@ -25,6 +25,16 @@ const initCanvas = () => {
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
 
+// 生成灰色和白色的近似颜色
+const generateColor = () => {
+  const colors = [];
+  for (let i = 0; i < 256; i++) {
+    colors.push(`rgb(${i},${i},${i})`);
+  }
+  return colors;
+}
+
+
 // 计算主色调
 const calColor = (img) => {
   // 当前页面中的颜色
@@ -32,48 +42,48 @@ const calColor = (img) => {
   new ImgMainColor(
     {
       imageData: img,
+      exclude: ["#ffffff", "#000000", ...generateColor()],
     },
     function (color) {
       const { hex } = color;
       currentColor.style.backgroundColor = hex;
       currentColor.innerHTML = hex;
-      setModalLightColor(hex);
+      setModalColor(hex);
     }
   );
 };
 
-const setModalLightColor = (color) => {
+const setModalColor = (color) => {
   // 当前model
   const model = document.getElementById("model");
-  model.attributes["light"].value = `type: ambient; color: ${color}`;
+  model.attributes["color"].value = `${color}`;
+};
+
+const filterBlackAndWhite = (src, h, w, callback) => {
+  const filteredImg = [];
+  for (let j = 0; j < w; j++) {
+    for (let i = 0; i < h; i++) {
+      const [r, g, b, a] = src.ucharPtr(i, j);
+      if (r > 200 && g > 200 && b > 200) continue;
+      if (r < 50 && g < 50 && b < 50) continue;
+      filteredImg.push(...src.ucharPtr(i, j));
+    }
+  }
+  callback(filteredImg);
 };
 
 const initTrack = () => {
   log("initTrack...");
-  let video = document.getElementById("arjs-video");
-  let canvas = document.getElementById("canvas");
-  let cap = new cv.VideoCapture(video);
-
-  let src = new cv.Mat(canvas.height, canvas.width, cv.CV_8UC4);
-  let dst = new cv.Mat(canvas.height, canvas.width, cv.CV_8UC4);
-  const FPS = 30;
-  const processVideo = () => {
-    try {
-      let begin = Date.now();
-
-      // 读取摄像头数据
-      cap.read(src);
-
-      // 过滤出天空区域,并执行callback
-      skyLineDetect(src, dst, video.height, video.width, calColor);
-
-      let delay = 1000 / FPS - (Date.now() - begin);
-      setTimeout(processVideo, delay);
-    } catch (err) {
-      log(`发生异常请重新进入`);
-    }
+  let MyTracker = function () {
+    MyTracker(this, "constructor");
+  };
+  MyTracker = function () {
+    MyTracker.prototype.track = (pixels) => calColor(pixels);
   };
 
-  // schedule the first one.
-  setTimeout(processVideo, 1000);
+  tracking.inherits(MyTracker, tracking.Tracker);
+
+  var myTracker = new MyTracker();
+
+  tracking.track("#arjs-video", myTracker);
 };
