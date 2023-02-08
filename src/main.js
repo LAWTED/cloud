@@ -1,4 +1,5 @@
 import { ImgMainColor } from "./main-color.js";
+import { skyLineDetect } from "./skyLineDetector/index.js";
 window.addEventListener("arjs-video-loaded", (e) => {
   setTimeout(() => initCanvas(), 1000);
   setTimeout(() => initTrack(), 2000);
@@ -24,67 +25,48 @@ const initCanvas = () => {
   log(`canvas: ${canvas.width} x ${canvas.height}`);
 };
 
-const currentColor = document.getElementById("current-color");
-const model = document.getElementById("model");
+// 计算主色调
+const calColor = (img) => {
+  // 当前页面中的颜色
+  const currentColor = document.getElementById("current-color");
+  new ImgMainColor(
+    {
+      imageData: img,
+    },
+    function (color) {
+      const { hex } = color;
+      currentColor.style.backgroundColor = hex;
+      currentColor.innerHTML = hex;
+      setModalLightColor(hex);
+    }
+  );
+};
+
+const setModalLightColor = (color) => {
+  // 当前model
+  const model = document.getElementById("model");
+  model.attributes["light"].value = `type: ambient; color: ${color}`;
+};
+
 const initTrack = () => {
   log("initTrack...");
   let video = document.getElementById("arjs-video");
   let canvas = document.getElementById("canvas");
   let cap = new cv.VideoCapture(video);
 
-  let skyView = [];
-  const kSize = new cv.Size(9, 3);
-  const calSkyLine = (dst, h, w) => {
-    // let skyline = cv.Mat.zeros(h, w, cv.CV_8UC1);
-    for (let j = 0; j < w; j++) {
-      for (let i = 0; i < h; i++) {
-        // skyline.ucharPtr(i, j)[0] = 1;
-        skyView.push(...src.ucharPtr(i, j));
-        if (dst.ucharPtr(i, j)[0] === 0) break;
-      }
-    }
-    // src.copyTo(dst, skyline)
-    new ImgMainColor(
-      {
-        imageData: skyView,
-      },
-      function (color) {
-        const { hex } = color
-        currentColor.style.backgroundColor = hex;
-        currentColor.innerHTML = hex;
-        model.attributes['light'].value = `type: ambient; color: ${hex}`;
-      }
-    );
-    skyView = []
-  };
-
-  const getSkyRegionGradient = (src, mask, h, w) => {
-    let imgGray = new cv.Mat();
-    cv.cvtColor(src, imgGray, cv.COLOR_RGBA2GRAY, 0);
-
-    cv.blur(imgGray, imgGray, kSize);
-    cv.medianBlur(imgGray, imgGray, 5);
-    let lap = new cv.Mat();
-    cv.Laplacian(imgGray, lap, cv.CV_8U, 1, 1, 0, cv.BORDER_DEFAULT);
-    let gradient_mask = new cv.Mat();
-    cv.threshold(lap, gradient_mask, 6, 255, cv.THRESH_BINARY_INV);
-    let M = cv.Mat.ones(9, 3, cv.CV_8U);
-    cv.erode(gradient_mask, mask, M);
-    imgGray.delete();
-    lap.delete();
-    calSkyLine(mask, h, w);
-  };
-
   let src = new cv.Mat(canvas.height, canvas.width, cv.CV_8UC4);
   let dst = new cv.Mat(canvas.height, canvas.width, cv.CV_8UC4);
-
   const FPS = 30;
   const processVideo = () => {
     try {
       let begin = Date.now();
+
+      // 读取摄像头数据
       cap.read(src);
-      getSkyRegionGradient(src, dst, video.height, video.width);
-      // cv.imshow("canvas", dst);
+
+      // 过滤出天空区域,并执行callback
+      skyLineDetect(src, dst, video.height, video.width, calColor);
+
       let delay = 1000 / FPS - (Date.now() - begin);
       setTimeout(processVideo, delay);
     } catch (err) {
