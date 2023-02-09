@@ -1,4 +1,4 @@
-import { ImgMainColor } from "./main-color.js";
+import { ImgMainColor } from "./mainColor";
 import { skyLineDetect } from "./skyLineDetector/index.js";
 window.addEventListener("arjs-video-loaded", (e) => {
   setTimeout(() => initCanvas(), 1000);
