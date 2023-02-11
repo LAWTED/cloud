@@ -93,6 +93,7 @@ const initTrack = () => {
 
 let meter = null;
 let rafID = null;
+let idle = true;
 const canvasContext = document.getElementById("meter").getContext("2d");
 const startMeter = () => {
   // grab an audio context
@@ -151,22 +152,31 @@ function drawLoop(time) {
 
   // set animation
   const transferVolume = meter.volume * WIDTH * 1.4;
+  if (!idle) return;
   if (transferVolume < 30) {
     document
       .getElementById("fox")
       .setAttribute("animation-mixer", { clip: "Survey" });
+    idle = false;
+    setTimeout(() => {
+      idle = true;
+    }, 3000);
   } else if (transferVolume < 60) {
     document
       .getElementById("fox")
       .setAttribute("animation-mixer", { clip: "Walk" });
-  } else if (transferVolume < 100) {
-    document
-      .getElementById("fox")
-      .setAttribute("animation-mixer", { clip: "Run" });
+    idle = false;
+    setTimeout(() => {
+      idle = true;
+    }, 3000);
   } else {
     document
       .getElementById("fox")
-      .setAttribute("animation-mixer", "clip: Survey");
+      .setAttribute("animation-mixer", { clip: "Run" });
+    idle = false;
+    setTimeout(() => {
+      idle = true;
+    }, 3000);
   }
 
   // set up the next visual callback
