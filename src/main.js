@@ -167,7 +167,7 @@ function drawLoop(time) {
     idle = false;
     setTimeout(() => {
       idle = true;
-    }, 3000);
+    }, 5000);
   } else {
     document
       .getElementById("fox")
@@ -175,7 +175,7 @@ function drawLoop(time) {
     idle = false;
     setTimeout(() => {
       idle = true;
-    }, 3000);
+    }, 5000);
   }
 
   // set up the next visual callback
