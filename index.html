@@ -17,7 +17,7 @@
 <body style="margin : 0px; overflow: hidden;">
     <a-scene embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;'
-        vr-mode-ui="enabled: false" gesture-detector>
+        vr-mode-ui="enabled: false" gesture-detector id="scene">
         <a-marker preset="hiro" raycaster="objects: .clickable" emitevents="true"
             cursor="fuse: false; rayOrigin: mouse;">
             <!-- <a-box color="red" position="0 -2 0" id="model"></a-box> -->
@@ -25,7 +25,7 @@
             <!-- Run Survey Walk -->
             <a-entity gltf-model="/Fox/Fox.gltf" scale="0.01 0.01 0.01" id="fox"
                 animation-mixer="clip: Survey; crossFadeDuration: 2" id="fox"
-                gesture-handler="minScale: 0.25; maxScale: 10" class="clickable"></a-entity>
+                gesture-handler class="clickable"></a-entity>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
