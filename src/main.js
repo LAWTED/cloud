@@ -160,10 +160,6 @@ function drawLoop(time) {
     document
       .getElementById("fox")
       .setAttribute("animation-mixer", { clip: "Survey" });
-    idle = false;
-    setTimeout(() => {
-      idle = true;
-    }, 3000);
   } else if (transferVolume < 60) {
     document
       .getElementById("fox")
