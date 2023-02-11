@@ -152,7 +152,10 @@ function drawLoop(time) {
 
   // set animation
   const transferVolume = meter.volume * WIDTH * 1.4;
-  if (!idle) return;
+  if (!idle) {
+    rafID = window.requestAnimationFrame(drawLoop);
+    return
+  }
   if (transferVolume < 30) {
     document
       .getElementById("fox")
