@@ -1,8 +1,10 @@
 import { ImgMainColor } from "./mainColor";
 import { skyLineDetect } from "./skyLineDetector/index.js";
+import { createAudioMeter } from "./volumeMeter";
 window.addEventListener("arjs-video-loaded", (e) => {
   setTimeout(() => initCanvas(), 1000);
   setTimeout(() => initTrack(), 2000);
+  setTimeout(() => startMeter(), 1000);
 });
 
 const log = (msg) => {
@@ -32,8 +34,7 @@ const generateColor = () => {
     colors.push(`rgb(${i},${i},${i})`);
   }
   return colors;
-}
-
+};
 
 // 计算主色调
 const calColor = (img) => {
@@ -48,7 +49,7 @@ const calColor = (img) => {
       const { hex } = color;
       currentColor.style.backgroundColor = hex;
       currentColor.innerHTML = hex;
-      setModalColor(hex);
+      // setModalColor(hex);
     }
   );
 };
@@ -87,3 +88,87 @@ const initTrack = () => {
 
   tracking.track("#arjs-video", myTracker);
 };
+
+// volume meter part
+
+let meter = null;
+let rafID = null;
+const canvasContext = document.getElementById("meter").getContext("2d");
+const startMeter = () => {
+  // grab an audio context
+  const audioContext = new AudioContext();
+
+  // Attempt to get audio input
+  navigator.mediaDevices
+    .getUserMedia({
+      audio: {
+        mandatory: {
+          googEchoCancellation: "false",
+          googAutoGainControl: "false",
+          googNoiseSuppression: "false",
+          googHighpassFilter: "false",
+        },
+        optional: [],
+      },
+    })
+    .then((stream) => {
+      // Create an AudioNode from the stream.
+      const mediaStreamSource = audioContext.createMediaStreamSource(stream);
+
+      // Create a new volume meter and connect it.
+      meter = createAudioMeter(audioContext);
+      mediaStreamSource.connect(meter);
+
+      // kick off the visual updating
+      // setAnimation()
+      drawLoop();
+    })
+    .catch((err) => {
+      // always check for errors at the end.
+      console.error(`${err.name}: ${err.message}`);
+      alert("Stream generation failed.");
+    });
+};
+
+// const setAnimation = () => {
+//   setInterval(() => {
+//     console.log(meter.volume);
+//   }, 100);
+// }
+
+function drawLoop(time) {
+  // clear the background
+  const WIDTH = 100;
+  const HEIGHT = 15;
+  canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
+
+  // check if we're currently clipping
+  if (meter.checkClipping()) canvasContext.fillStyle = "#F87171";
+  else canvasContext.fillStyle = "#4ADE80";
+
+  // draw a bar based on the current volume
+  canvasContext.fillRect(0, 0, meter.volume * WIDTH * 1.4, HEIGHT);
+
+  // set animation
+  const transferVolume = meter.volume * WIDTH * 1.4;
+  if (transferVolume < 30) {
+    document
+      .getElementById("fox")
+      .setAttribute("animation-mixer", { clip: "Survey" });
+  } else if (transferVolume < 60) {
+    document
+      .getElementById("fox")
+      .setAttribute("animation-mixer", { clip: "Walk" });
+  } else if (transferVolume < 100) {
+    document
+      .getElementById("fox")
+      .setAttribute("animation-mixer", { clip: "Run" });
+  } else {
+    document
+      .getElementById("fox")
+      .setAttribute("animation-mixer", "clip: Survey");
+  }
+
+  // set up the next visual callback
+  rafID = window.requestAnimationFrame(drawLoop);
+}
