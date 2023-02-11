@@ -2,8 +2,7 @@ import { ImgMainColor } from "./mainColor";
 import { skyLineDetect } from "./skyLineDetector/index.js";
 import { createAudioMeter } from "./volumeMeter";
 window.addEventListener("arjs-video-loaded", (e) => {
-  setTimeout(() => initCanvas(), 1000);
-  setTimeout(() => initTrack(), 2000);
+  setTimeout(() => initTrack(), 1000);
   setTimeout(() => startMeter(), 1000);
 });
 
@@ -11,21 +10,6 @@ const log = (msg) => {
   document.getElementById("log").innerHTML += `<br/> ${msg}`;
 };
 
-const initCanvas = () => {
-  log("initCanvas...");
-  let canvas = document.createElement("canvas");
-  canvas.id = "canvas";
-  let video = document.getElementsByTagName("video")[0];
-  const { width, height } = video.style;
-  canvas.width = width.replace("px", "");
-  canvas.height = height.replace("px", "");
-  video.width = width.replace("px", "");
-  video.height = height.replace("px", "");
-  canvas.style.cssText = video.style.cssText;
-  canvas.style.zIndex = 100;
-  document.body.insertBefore(canvas, document.body.firstChild);
-  log(`canvas: ${canvas.width} x ${canvas.height}`);
-};
 
 // 生成灰色和白色的近似颜色
 const generateColor = () => {
