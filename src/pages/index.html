@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/ar/aframe.min.js"></script>
+  <script src="/ar/aframe-orbit-controls.min.js"></script>
+  <script src="/aframe-extras/aframe-extras.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #main-page {
+      width: 100%;
+      height: 100%;
+    }
+
+    .head {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      height: 10%;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 50px;
+      height: 90%;
+    }
+
+    .card {
+      background-color: #f1f1f1;
+      width: 90%;
+      height: 40%;
+      border: 5px solid #ccc;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    canvas {
+      border-radius: 15px;
+    }
+
+    .card-title {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      font-weight: bold;
+      color: #333;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    .card-title:hover {
+      opacity: 100;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      font-weight: bold;
+      color: #555;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main-page">
+    <div class="head">
+      <h1>My AR Page</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <a-scene embedded style="width: 100%; height: 100%" vr-mode-ui="enabled: false">
+          <a-entity gltf-model="/Fox/Fox.gltf" position="0 0 0" scale="0.05 0.05 0.05"
+            animation-mixer="clip: Survey; crossFadeDuration: 2"></a-entity>
+          <a-entity camera look-controls
+            orbit-controls="target: 0 1.6 -0.5; minDistance: 0.5; maxDistance: 10; initialPosition: 0 5 5"></a-entity>
+
+        </a-scene>
+        <a onclick="route()" href="/fox" class="card-title">FOX</a>
+      </div>
+      <div class="card">
+        <a-scene embedded style="width: 100%; height: 100%" vr-mode-ui="enabled: false">
+
+          <a-entity gltf-model="/cloud/cloud.gltf" scale=" 0.3 0.3 0.3" rotation="0 90 0" position="0 1 0"></a-entity>
+          <a-entity camera look-controls
+            orbit-controls="target: 0 1.6 -0.5; minDistance: 0.5; maxDistance: 10; initialPosition: 10 10 10"></a-entity>
+        </a-scene>
+        <a onclick="route()" href="/cloud" class="card-title">CLOUD</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

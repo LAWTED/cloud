@@ -1,4 +1,3 @@
-
 const kSize = new cv.Size(9, 3);
 
 const calSkyLine = (src, dst, h, w, callback) => {
