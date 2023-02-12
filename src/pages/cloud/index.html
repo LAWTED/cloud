@@ -10,7 +10,6 @@
   <script src="/ar/aframe-ar.js"></script>
   <script src="/ar/gestures.js"></script>
   <script src="/opencv/index.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="style.css">
   <script src="/aframe-extras/aframe-extras.js"></script>
   <script src="/aframe-extras/aframe-text-geometry-component.min.js"></script>
   <script src="/src/pages/cloud/index.js" type="module" async></script>
@@ -21,8 +20,8 @@
     arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;'
     vr-mode-ui="enabled: false" gesture-detector id="scene">
     <a-marker preset="hiro" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
-      <a-entity gltf-model="/cloud/cloud.gltf" scale="0.1 0.1 0.1" id="model" rotation="0 90 0" position="0 1 0.5" light="type: ambient; color: #FFF"
-        gesture-handler class="clickable"></a-entity>
+      <a-entity gltf-model="/cloud/cloud.gltf" scale="0.1 0.1 0.1" id="model" rotation="0 90 0" position="0 1 0.5"
+        light="type: ambient; color: #FFF" gesture-handler class="clickable"></a-entity>
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
@@ -33,9 +32,6 @@
   <p id="current-color"
     style="position: fixed; top: 230px; left: 30px; color: white;  overflow: scroll; z-index: 1000; border-radius: 5px">
   </p>
-  <script>
-
-  </script>
 </body>
 
 </html>
