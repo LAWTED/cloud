@@ -10,8 +10,8 @@ const route = (event) => {
 const routes = {
   404: "/src/pages/404.html",
   "/": "/src/pages/index.html",
-  "/fox": "/src/pages/fox/index.html",
-  "/cloud": "/src/pages/cloud/index.html",
+  "/fox": "/src/pages/foxPage/index.html",
+  "/cloud": "/src/pages/cloudPage/index.html",
 };
 
 const handleLocation = async () => {
