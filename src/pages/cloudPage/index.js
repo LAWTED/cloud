@@ -38,7 +38,7 @@ const calColor = (img) => {
 const setModalColor = (color) => {
   // 当前model
   const model = document.getElementById("model");
-  model.attributes["light"].value = `type: ambient; color: ${color}`;
+  model.attributes["color"].value = `${color}`;
 };
 
 const initTrack = () => {
