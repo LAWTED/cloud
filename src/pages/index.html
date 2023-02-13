@@ -12,7 +12,6 @@
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       width: 100vw;
       height: 100vh;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -52,28 +51,14 @@
     }
 
     .card-title {
-      opacity: 0;
+      opacity: 0.7;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 30px;
       font-weight: bold;
-      color: #eee;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-    }
-
-    .card-title:hover {
-      opacity: 100;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 30px;
-      font-weight: bold;
-      color: #555;
+      color: #333;
       text-decoration: none;
       padding: 10px 20px;
       border-radius: 10px;
@@ -90,9 +75,9 @@
       <div class="card">
         <a-scene embedded style="width: 100%; height: 100%" vr-mode-ui="enabled: false">
           <a-entity gltf-model="/Fox/Fox.gltf" position="0 0 0" scale="0.05 0.05 0.05"
-            animation-mixer="clip: Survey; crossFadeDuration: 2"></a-entity>
+            animation-mixer="clip: Survey; crossFadeDuration: 2;"></a-entity>
           <a-camera look-controls
-            orbit-controls="target: 0 1.6 -0.5; minDistance: 0.5; maxDistance: 10; initialPosition: 0 5 5"
+            orbit-controls="target: 0 1.6 -0.5; minDistance: 0.5; maxDistance: 10; initialPosition: 0 5 5;"
             id="camera1"></a-camera>
         </a-scene>
         <a onclick="route()" href="/fox" class="card-title">FOX</a>
@@ -101,7 +86,7 @@
         <a-scene embedded style="width: 100%; height: 100%" vr-mode-ui="enabled: false">
           <a-box position="0 0 0" rotation="0 45 0" color="#4CC3D9"></a-box>
           <a-camera look-controls
-            orbit-controls="target: 0 0 0; minDistance: 0.5; maxDistance: 10; initialPosition: 0 1 3"
+            orbit-controls="target: 0 0 0; minDistance: 0.5; maxDistance: 10; initialPosition: 0 1 3; autoRotate: true; autoRotateSpeed: 0.5"
             id="camera2"></a-camera>
         </a-scene>
         <a onclick="route()" href="/cloud" class="card-title">CLOUD</a>
