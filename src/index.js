@@ -12,6 +12,7 @@ const routes = {
   "/": "/src/pages/index.html",
   "/fox": "/src/pages/foxPage/index.html",
   "/cloud": "/src/pages/cloudPage/index.html",
+  "/lineDoge": "/src/pages/lineDogePage/index.html",
 };
 
 const handleLocation = async () => {
