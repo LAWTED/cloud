@@ -13,6 +13,7 @@
     "vite": "^3.2.3"
   },
   "dependencies": {
-    "aframe-orbit-controls": "^1.3.0"
+    "aframe-orbit-controls": "^1.3.0",
+    "three": "^0.149.0"
   }
 }

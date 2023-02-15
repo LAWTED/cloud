@@ -13,6 +13,7 @@ const routes = {
   "/fox": "/src/pages/foxPage/index.html",
   "/cloud": "/src/pages/cloudPage/index.html",
   "/lineDoge": "/src/pages/lineDogePage/index.html",
+  "/cloudShader": "/src/pages/cloudShader/index.html",
 };
 
 const handleLocation = async () => {
