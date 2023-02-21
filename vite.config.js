@@ -13,7 +13,6 @@ export default {
         cloud: resolve(__dirname, "/src/pages/cloudPage/index.html"),
         fox: resolve(__dirname, "/src/pages/foxPage/index.html"),
         lineDoge: resolve(__dirname, "/src/pages/lineDogePage/index.html"),
-        cloudShader: resolve(__dirname, "/src/pages/cloudShader/index.html"),
       },
     },
   },
