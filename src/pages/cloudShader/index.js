@@ -291,15 +291,16 @@ function initialize() {
   });
 
   const mesh = new THREE.Mesh(geometry, material);
-  const light = new THREE.AmbientLight(0xffffff, 0.5);
   // 设置mesh的位置
   mesh.position.set(0, 1, 0);
   markerRoot1.add(mesh);
-  markerRoot1.add(light);
 }
 
 function update() {
   // update artoolkit on every frame
+  const color = new THREE.Color();
+  mesh.material.uniforms.base.value.set();
+
   if (arToolkitSource.ready !== false)
     arToolkitContext.update(arToolkitSource.domElement);
 }

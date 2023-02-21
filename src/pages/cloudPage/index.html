@@ -1,31 +1,26 @@
+
 <!DOCTYPE html>
-<html id="html">
 
 <head>
-  <title>Cloud</title>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Hello, AR Cube!</title>
   <script src="/ar/tracking.js"></script>
-  <script src="/ar/aframe.min.js"></script>
-  <script src="/ar/aframe-ar.js"></script>
-  <script src="/ar/gestures.js"></script>
-  <script src="/opencv/index.js" type="text/javascript"></script>
-  <script src="/aframe-extras/aframe-extras.js"></script>
-  <script src="/aframe-extras/aframe-text-geometry-component.min.js"></script>
+  <!-- include three.js library -->
+  <script src='/threejs/js/three.js'></script>
+  <!-- include jsartookit -->
+  <script src="/threejs/jsartoolkit5/artoolkit.min.js"></script>
+  <script src="/threejs/jsartoolkit5/artoolkit.api.js"></script>
+  <!-- include threex.artoolkit -->
+  <script src="/threejs/threex/threex-artoolkitsource.js"></script>
+  <script src="/threejs/threex/threex-artoolkitcontext.js"></script>
+  <script src="/threejs/threex/threex-arbasecontrols.js"></script>
+  <script src="/threejs/threex/threex-armarkercontrols.js"></script>
+
+  <!-- include mainjs-->
   <script src="/src/pages/cloudPage/index.js" type="module" async></script>
 </head>
 
-<body style="margin : 0px; overflow: hidden;">
-  <a-scene embedded
-    arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;'
-    vr-mode-ui="enabled: false" gesture-detector id="scene">
-    <a-marker preset="hiro" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
-      <a-box scale="0.5 0.5 0.5" position="0 1 0" rotation="0 0 0" color="#4CC3D9" id="model" gesture-handler
-        class="clickable"></a-box>
-
-    </a-marker>
-    <a-entity camera></a-entity>
-  </a-scene>
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
 
   <p id="log"
     style="position: fixed; top: 30px; left: 30px; color: white; width: 200px; height: 200px; overflow: scroll; z-index: 1000">
