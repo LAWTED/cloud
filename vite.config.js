@@ -12,7 +12,6 @@ export default {
         404: resolve(__dirname, "/src/pages/404.html"),
         cloud: resolve(__dirname, "/src/pages/cloudPage/index.html"),
         fox: resolve(__dirname, "/src/pages/foxPage/index.html"),
-        lineDoge: resolve(__dirname, "/src/pages/lineDogePage/index.html"),
       },
     },
   },
