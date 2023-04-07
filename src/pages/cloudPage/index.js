@@ -58,6 +58,8 @@ var markerRoot1, markerRoot2;
 var mesh1;
 let mesh, light;
 
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+
 initialize();
 animate();
 setTimeout(initTrack, 1000)
@@ -98,9 +100,6 @@ function initTexture(time) {
 
 function initialize() {
   scene = new THREE.Scene();
-
-  let ambientLight = new THREE.AmbientLight(0xcccccc, 0.5);
-  scene.add(ambientLight);
 
   camera = new THREE.Camera();
   scene.add(camera);
@@ -208,7 +207,7 @@ function initialize() {
 					}
 				`;
 
-  const fragmentShader = /* glsl */ `
+  const fragmentShader = /* glsl */`
 					precision highp float;
 					precision highp sampler3D;
 
@@ -228,6 +227,7 @@ function initialize() {
 					uniform float opacity;
 					uniform float steps;
 					uniform float frame;
+					uniform vec3 ambientLightColor;
 
 					uint wang_hash(uint seed)
 					{
@@ -300,7 +300,7 @@ function initialize() {
 
 							float col = shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
 
-							ac.rgb += ( 1.0 - ac.a ) * d * col;
+							ac.rgb += ( 1.0 - ac.a ) * d * col * ambientLightColor;
 
 							ac.a += ( 1.0 - ac.a ) * d;
 
@@ -320,32 +320,41 @@ function initialize() {
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   const material = new THREE.ShaderMaterial({
     glslVersion: THREE.GLSL3,
-    uniforms: {
-      base: { value: new THREE.Color(0xffffff) },
-      map: { value: texture },
-      cameraPos: { value: new THREE.Vector3() },
-      threshold: { value: 0.25 },
-      opacity: { value: 0.25 },
-      range: { value: 0.1 },
-      steps: { value: 100 },
-      frame: { value: 0 },
-    },
+    uniforms: THREE.UniformsUtils.merge([
+      THREE.UniformsLib['lights'],
+      {
+        // base: { value: new THREE.Color(0x798aa0) },
+        base: { value: new THREE.Color(0xaaaaaa) },
+        map: { value: texture },
+        cameraPos: { value: new THREE.Vector3() },
+        threshold: { value: 0.25 },
+        opacity: { value: 0.25 },
+        range: { value: 0.1 },
+        steps: { value: 100 },
+        frame: { value: 0 }
+      }
+    ]),
+    lights: true,
     vertexShader,
     fragmentShader,
     side: THREE.BackSide,
-    transparent: true,
+    transparent: true
   });
 
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(0, 1, 0);
   markerRoot1.add(mesh);
+  markerRoot1.add(ambientLight)
 }
 
 function update() {
   // turn hex(mainColor) into THREE.Color
   let color = new THREE.Color(mainColor);
   if (markerRoot1.visible) {
-    mesh.material.uniforms.base.value = color;
+    // 修改ambientLight的颜色
+
+    ambientLight.color = color;
+    // mesh.material.uniforms.base.value = color;
     // 修改material.uniforms.opacity.value的值，可以改变透明度在0.25 - 0.75之间
     // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
     // 修复mesh.scale的值，可以改变大小
@@ -353,7 +362,7 @@ function update() {
     // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
     // mesh 旋转
     // mesh.rotation.y += 0.01;
-    mesh.material.uniforms.map.value = initTexture(totalTime);
+    // mesh.material.uniforms.map.value = initTexture(totalTime);
   }
 
   // update artoolkit on every frame
