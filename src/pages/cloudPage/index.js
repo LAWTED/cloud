@@ -193,11 +193,6 @@ function initialize() {
   // Material
 
   const vertexShader = /* glsl */ `
-					in vec3 position;
-
-					uniform mat4 modelMatrix;
-					uniform mat4 modelViewMatrix;
-					uniform mat4 projectionMatrix;
 					uniform vec3 cameraPos;
 
 					out vec3 vOrigin;
@@ -323,7 +318,7 @@ function initialize() {
 				`;
 
   const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.RawShaderMaterial({
+  const material = new THREE.ShaderMaterial({
     glslVersion: THREE.GLSL3,
     uniforms: {
       base: { value: new THREE.Color(0xffffff) },
