@@ -323,8 +323,8 @@ function initialize() {
     uniforms: THREE.UniformsUtils.merge([
       THREE.UniformsLib['lights'],
       {
-        // base: { value: new THREE.Color(0x798aa0) },
-        base: { value: new THREE.Color(0xaaaaaa) },
+        base: { value: new THREE.Color(0x798aa0) },
+        // base: { value: new THREE.Color(0xaaaaaa) },
         map: { value: texture },
         cameraPos: { value: new THREE.Vector3() },
         threshold: { value: 0.25 },
@@ -361,7 +361,7 @@ function update() {
     // mesh.scale.set(1 + Math.sin(totalTime) * 0.25, 1 + Math.sin(totalTime) * 0.15, 1 + Math.sin(totalTime) * 0.35);
     // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
     // mesh 旋转
-    // mesh.rotation.y += 0.01;
+    mesh.rotation.y += 0.01;
     // mesh.material.uniforms.map.value = initTexture(totalTime);
   }
 
