@@ -14,7 +14,7 @@ This is a AR Project by Lawted, which shows the AR cloud entity beyond the view 
  - [Sky Detect](https://github.com/cftang0827/sky-detector)
  - [MainColor Detect](https://github.com/whoiam2007s/ImgMainColor)
  - [TensorFlow.js](https://www.tensorflow.org/js)
- 
+
 ## Run Locally
 
 Clone the project
@@ -46,7 +46,9 @@ Start the server
 
 **Cloud**
 
-- Use Tracking.js with MainColor detect and Sky Detect
+- [x] make cloud change through time
 
-- Use TensorFlow.js
+- [ ] Use TensorFlow.js to analyze the sound
+
+
 

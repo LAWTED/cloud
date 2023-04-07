@@ -62,6 +62,40 @@ initialize();
 animate();
 setTimeout(initTrack, 1000)
 
+function initTexture(time) {
+  const size = 128;
+  const data = new Uint8Array(size * size * size);
+
+  let i = 0;
+  const scale = 0.05;
+  const perlin = new ImprovedNoise();
+  const vector = new THREE.Vector3();
+
+  for (let z = 0; z < size; z++) {
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const d =
+          1.0 -
+          vector
+            .set(x, y, z)
+            .subScalar(size / 2)
+            .divideScalar(size)
+            .length();
+        data[i] = (128 + 128 * perlin.noise(x * scale / (Math.sin(time) * 0.25 + 1.25), y * scale / (Math.sin(time) * 0.15 + 1), z * scale / (Math.cos(time) * 0.25 + 1.25))) * d * d;
+        i++;
+      }
+    }
+  }
+
+  const texture = new THREE.Data3DTexture(data, size, size, size);
+  texture.format = THREE.RedFormat;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.unpackAlignment = 1;
+  texture.needsUpdate = true;
+  return texture;
+}
+
 function initialize() {
   scene = new THREE.Scene();
 
@@ -154,41 +188,7 @@ function initialize() {
 
   // Texture
 
-  const size = 128;
-  const data = new Uint8Array(size * size * size);
-
-  let i = 0;
-  const scale = 0.05;
-  const perlin = new ImprovedNoise();
-  const vector = new THREE.Vector3();
-
-  for (let z = 0; z < size; z++) {
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        const d =
-          1.0 -
-          vector
-            .set(x, y, z)
-            .subScalar(size / 2)
-            .divideScalar(size)
-            .length();
-        data[i] =
-          (128 +
-            128 *
-              perlin.noise((x * scale) / 1.5, y * scale, (z * scale) / 1.5)) *
-          d *
-          d;
-        i++;
-      }
-    }
-  }
-
-  const texture = new THREE.Data3DTexture(data, size, size, size);
-  texture.format = THREE.RedFormat;
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.unpackAlignment = 1;
-  texture.needsUpdate = true;
+  const texture = initTexture(totalTime)
 
   // Material
 
@@ -349,9 +349,18 @@ function initialize() {
 function update() {
   // turn hex(mainColor) into THREE.Color
   let color = new THREE.Color(mainColor);
-  if(markerRoot1.visible) {
+  if (markerRoot1.visible) {
     mesh.material.uniforms.base.value = color;
+    // 修改material.uniforms.opacity.value的值，可以改变透明度在0.25 - 0.75之间
+    // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
+    // 修复mesh.scale的值，可以改变大小
+    // mesh.scale.set(1 + Math.sin(totalTime) * 0.25, 1 + Math.sin(totalTime) * 0.15, 1 + Math.sin(totalTime) * 0.35);
+    // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
+    // mesh 旋转
+    // mesh.rotation.y += 0.01;
+    mesh.material.uniforms.map.value = initTexture(totalTime);
   }
+
   // update artoolkit on every frame
   if (arToolkitSource.ready !== false)
     arToolkitContext.update(arToolkitSource.domElement);
