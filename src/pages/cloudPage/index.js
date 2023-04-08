@@ -65,6 +65,7 @@ animate();
 setTimeout(initTrack, 1000)
 
 function initTexture(time) {
+  time /= 10;
   const size = 128;
   const data = new Uint8Array(size * size * size);
 
@@ -361,8 +362,8 @@ function update() {
     // mesh.scale.set(1 + Math.sin(totalTime) * 0.25, 1 + Math.sin(totalTime) * 0.15, 1 + Math.sin(totalTime) * 0.35);
     // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
     // mesh 旋转
-    mesh.rotation.y += 0.01;
-    // mesh.material.uniforms.map.value = initTexture(totalTime);
+		mesh.rotation.y = - performance.now() / 7500;
+    mesh.material.uniforms.map.value = initTexture(totalTime);
   }
 
   // update artoolkit on every frame
