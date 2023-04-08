@@ -62,7 +62,16 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 
 initialize();
 animate();
-setTimeout(initTrack, 1000)
+
+// 轮询查看是否有tag video元素
+const timer = setInterval(() => {
+  if (document.getElementsByTagName("video").length > 0) {
+    initTrack();
+    // 停止轮询
+    clearInterval(timer);
+  }
+}, 300);
+
 
 function initTexture(time) {
   time /= 10;
@@ -362,7 +371,7 @@ function update() {
     // mesh.scale.set(1 + Math.sin(totalTime) * 0.25, 1 + Math.sin(totalTime) * 0.15, 1 + Math.sin(totalTime) * 0.35);
     // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
     // mesh 旋转
-		mesh.rotation.y = - performance.now() / 7500;
+    mesh.rotation.y = - performance.now() / 7500;
     mesh.material.uniforms.map.value = initTexture(totalTime);
   }
 
