@@ -1,6 +1,7 @@
 import { createAudioMeter } from "/src/volumeMeter";
 window.addEventListener("arjs-video-loaded", (e) => {
   setTimeout(() => startMeter(), 1000);
+  setTimeout(() => app(), 1000);
 });
 
 const log = (msg) => {
@@ -93,4 +94,26 @@ const drawLoop = (time) => {
 
   // set up the next visual callback
   rafID = window.requestAnimationFrame(drawLoop);
+}
+
+let recognizer;
+
+// tensorflow part
+function predictWord() {
+  // Array of words that the recognizer is trained to recognize.
+  const words = recognizer.wordLabels();
+  recognizer.listen(({ scores }) => {
+    // Turn scores into a list of (score,word) pairs.
+    scores = Array.from(scores).map((s, i) => ({ score: s, word: words[i] }));
+    // Find the most probable word.
+    scores.sort((s1, s2) => s2.score - s1.score);
+    document.getElementById("current-speech").innerHTML = scores[0].word;
+  }, { probabilityThreshold: 0.75 });
+}
+
+async function app() {
+  log('Loading model...');
+  recognizer = speechCommands.create('BROWSER_FFT');
+  await recognizer.ensureModelLoaded();
+  predictWord();
 }
