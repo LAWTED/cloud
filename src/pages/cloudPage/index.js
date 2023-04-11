@@ -372,7 +372,7 @@ function update() {
     // mesh.material.uniforms.opacity.value = 0.25 + Math.sin(totalTime) * 0.25;
     // mesh 旋转
     mesh.rotation.y = - performance.now() / 7500;
-    mesh.material.uniforms.map.value = initTexture(totalTime);
+    // mesh.material.uniforms.map.value = initTexture(totalTime);
   }
 
   // update artoolkit on every frame
