@@ -24,13 +24,12 @@ jobs:
       - name: Build # 第三步，打包代码
         run: npm run build
       # Deploy
-      - name: Deploy to Server # 第四步，rsync推送文件
-        uses: AEnterprise/rsync-deploy@v1.0 # 使用别人包装好的步骤镜像
-        env:
-          DEPLOY_KEY: ${{ secrets.ACCESS_TOKEN }} # 引用配置，SSH私钥
-          ARGS: -avz --delete --exclude='*.pyc' # rsync参数，排除.pyc文件
-          SERVER_PORT: '22' # SSH端口
-          FOLDER: ./dist/* # 要推送的文件夹，路径相对于代码仓库的根目录
-          SERVER_IP: ${{ secrets.REMOTE_HOST }} # 引用配置，服务器的host名（IP或者域名domain.com）
-          USERNAME: ${{ secrets.REMOTE_USER }} # 引用配置，服务器登录名
-          SERVER_DESTINATION: ${{ secrets.TARGET }} # 部署到目标文件夹
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: ./dist/*
+          remote_path: ${{ secrets.TARGET }}
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.ACCESS_TOKEN }}
