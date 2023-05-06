@@ -98,7 +98,14 @@ const drawLoop = (time) => {
 
 let recognizer;
 let model;
+const NUM_FRAMES = 10;
+const INPUT_SHAPE = [NUM_FRAMES, 232, 1];
 
+function normalize(x) {
+ const mean = -100;
+ const std = 10;
+ return x.map(x => (x - mean) / std);
+}
 
 async function app() {
   log('Loading model...');
