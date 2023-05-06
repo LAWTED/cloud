@@ -102,7 +102,7 @@ let model;
 
 async function app() {
   log('Loading model...');
-  recognizer = speechCommands.create();
+  recognizer = speechCommands.create('BROWSER_FFT');
   model = await tf.loadLayersModel('https://cloud.lawted.tech/fox-speech-model/fox-speech-model.json');
   model.summary();
   log('Successfully loaded model');
