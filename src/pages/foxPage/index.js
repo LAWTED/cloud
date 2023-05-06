@@ -100,16 +100,17 @@ let recognizer;
 let model;
 const NUM_FRAMES = 10;
 const INPUT_SHAPE = [NUM_FRAMES, 232, 1];
+const action = ["Run", "Walk", "Survey"]
 
 function normalize(x) {
- const mean = -100;
- const std = 10;
- return x.map(x => (x - mean) / std);
+  const mean = -100;
+  const std = 10;
+  return x.map(x => (x - mean) / std);
 }
 
 async function logLabel(labelTensor) {
- const label = (await labelTensor.data())[0];
- document.getElementById('console').textContent = label;
+  const label = (await labelTensor.data())[0];
+  document.getElementById('command').textContent = action[label];
 }
 
 async function app() {
