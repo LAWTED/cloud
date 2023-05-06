@@ -105,6 +105,18 @@ async function app() {
   model = await tf.loadLayersModel('https://cloud.lawted.tech/fox-speech-model/fox-speech-model.json');
   console.log(model);
   log('Successfully loaded model');
+  recognizer.listen(async ({ spectrogram: { frameSize, data } }) => {
+    const vals = normalize(data.subarray(-frameSize * NUM_FRAMES));
+    const input = tf.tensor(vals, [1, ...INPUT_SHAPE]);
+    const probs = model.predict(input);
+    const predLabel = probs.argMax(1);
+    console.log(predLabel);
+    tf.dispose([input, probs, predLabel]);
+  }, {
+    overlapFactor: 0.999,
+    includeSpectrogram: true,
+    invokeCallbackOnNoiseAndUnknown: true
+  });
   // 加载模型 public/fox-speech-model/fox-speech-model.json
 
 }
