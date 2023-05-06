@@ -97,6 +97,7 @@ const drawLoop = (time) => {
 }
 
 let recognizer;
+let model;
 
 
 async function app() {
