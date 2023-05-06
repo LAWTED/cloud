@@ -95,3 +95,15 @@ const drawLoop = (time) => {
   // set up the next visual callback
   rafID = window.requestAnimationFrame(drawLoop);
 }
+
+let recognizer;
+
+
+async function app() {
+  log('Loading model...');
+  model = await tf.loadLayersModel('https://cloud.lawted.tech/fox-speech-model/fox-speech-model.json');
+  console.log(model);
+  log('Successfully loaded model');
+  // 加载模型 public/fox-speech-model/fox-speech-model.json
+
+}
