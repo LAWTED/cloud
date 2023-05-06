@@ -107,6 +107,11 @@ function normalize(x) {
  return x.map(x => (x - mean) / std);
 }
 
+async function logLabel(labelTensor) {
+ const label = (await labelTensor.data())[0];
+ document.getElementById('console').textContent = label;
+}
+
 async function app() {
   log('Loading model...');
   recognizer = speechCommands.create('BROWSER_FFT');
@@ -118,7 +123,7 @@ async function app() {
     const input = tf.tensor(vals, [1, ...INPUT_SHAPE]);
     const probs = model.predict(input);
     const predLabel = probs.argMax(1);
-    console.log(predLabel);
+    await logLabel(predLabel);
     tf.dispose([input, probs, predLabel]);
   }, {
     overlapFactor: 0.999,
