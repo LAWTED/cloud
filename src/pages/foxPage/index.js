@@ -103,7 +103,7 @@ let model;
 async function app() {
   log('Loading model...');
   model = await tf.loadLayersModel('https://cloud.lawted.tech/fox-speech-model/fox-speech-model.json');
-  console.log(model);
+  model.summary();
   log('Successfully loaded model');
   recognizer.listen(async ({ spectrogram: { frameSize, data } }) => {
     const vals = normalize(data.subarray(-frameSize * NUM_FRAMES));
