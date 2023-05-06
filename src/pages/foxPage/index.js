@@ -102,6 +102,7 @@ let model;
 
 async function app() {
   log('Loading model...');
+  recognizer = speechCommands.create();
   model = await tf.loadLayersModel('https://cloud.lawted.tech/fox-speech-model/fox-speech-model.json');
   model.summary();
   log('Successfully loaded model');
@@ -117,6 +118,4 @@ async function app() {
     includeSpectrogram: true,
     invokeCallbackOnNoiseAndUnknown: true
   });
-  // 加载模型 public/fox-speech-model/fox-speech-model.json
-
 }
