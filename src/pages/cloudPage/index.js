@@ -327,7 +327,7 @@ function initialize() {
 					}
 				`;
 
-  const geometry = new THREE.BoxGeometry(3, 3, 3);
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
   const material = new THREE.ShaderMaterial({
     glslVersion: THREE.GLSL3,
     uniforms: THREE.UniformsUtils.merge([
@@ -353,6 +353,7 @@ function initialize() {
 
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(0, 1, 0);
+  mesh.scale.set(3, 3, 3);
   markerRoot1.add(mesh);
   markerRoot1.add(ambientLight)
 }
