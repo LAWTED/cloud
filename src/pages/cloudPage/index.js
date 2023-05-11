@@ -353,7 +353,7 @@ function initialize() {
 
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(0, 1, 0);
-  mesh.scale.set(3, 3, 3);
+  mesh.scale.set(2, 2, 2);
   markerRoot1.add(mesh);
   markerRoot1.add(ambientLight)
 }
