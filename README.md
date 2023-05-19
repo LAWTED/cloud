@@ -48,7 +48,7 @@ Start the server
 
 - [x] make cloud change through time
 
-- [ ] Use TensorFlow.js to analyze the sound
+- [x] Use TensorFlow.js to analyze the sound
 
 
 
